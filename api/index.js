@@ -24,12 +24,9 @@ app.use(
   })
 );
 
-var apiRouter = express.Router();
-apiRouter.use("/", indexRouter);
-apiRouter.use("/users", usersRouter);
-apiRouter.use("/tickets", ticketsRouter);
-
-app.use("/", apiRouter);
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
+app.use("/tickets", ticketsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
