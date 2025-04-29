@@ -1,4 +1,4 @@
-# Job Interview Project
+# Deer Design Ticketing System
 
 This project is a full-stack application built using React for the frontend and Express for the backend. It serves as a coding exercise to demonstrate the ability to set up a modern web application.
 
