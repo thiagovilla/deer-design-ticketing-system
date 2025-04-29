@@ -39,3 +39,4 @@ public/static/
 # OS generated files
 Thumbs.db
 .DS_Store
+.vercel
