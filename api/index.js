@@ -17,7 +17,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [process.env.APP_URL, "http://localhost:3000"],
+    credentials: true,
+  })
+);
 
 var apiRouter = express.Router();
 apiRouter.use("/", indexRouter);
