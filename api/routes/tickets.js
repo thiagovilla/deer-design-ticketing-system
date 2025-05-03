@@ -63,4 +63,17 @@ router.get("/", function (req, res) {
   res.json(tickets);
 });
 
+// Delete a ticket by ID
+router.delete("/:id", function (req, res) {
+  const ticketId = parseInt(req.params.id, 10);
+  const ticketIndex = tickets.findIndex((ticket) => ticket.id === ticketId);
+
+  if (ticketIndex === -1) {
+    return res.status(404).json({ error: "Ticket not found" });
+  }
+
+  tickets.splice(ticketIndex, 1);
+  res.status(200).json({ message: "Ticket deleted successfully" });
+});
+
 module.exports = router;

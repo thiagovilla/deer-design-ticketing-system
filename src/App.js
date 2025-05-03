@@ -67,6 +67,21 @@ function App() {
       .catch((error) => setError("Error creating ticket: " + error.message));
   };
 
+  const handleDelete = (ticketId) => {
+    // Send delete request to the API
+    fetch(`${process.env.REACT_APP_API_URL}/tickets/${ticketId}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          setTickets(tickets.filter((ticket) => ticket.id !== ticketId));
+        } else {
+          throw new Error("Failed to delete the ticket");
+        }
+      })
+      .catch((error) => setError("Error deleting ticket: " + error.message));
+  };
+
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
       case "done":
@@ -147,7 +162,41 @@ function App() {
             |{" "}
             <span style={{ color: getStatusColor(ticket.status) }}>
               Status: {ticket.status}
-            </span>
+            </span>{" "}
+            |{" "}
+            <button
+              onClick={() => handleDelete(ticket.id)}
+              style={{
+                border: "1px solid #ccc",
+                background: "none",
+                padding: "4px 8px",
+                borderRadius: "4px",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px",
+                color: "black",
+                verticalAlign: "middle",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ width: "16px", height: "16px" }}
+              >
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6l-2 14H7L5 6"></path>
+                <path d="M10 11v6"></path>
+                <path d="M14 11v6"></path>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+              </svg>
+              Delete
+            </button>
           </li>
         ))}
       </ul>
