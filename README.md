@@ -2,6 +2,16 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## App Description
+
+Deer Design Ticketing System is a task management application designed to streamline project workflows. It allows users to create, assign, and track tasks efficiently with minimal input.
+
+## Features
+
+- **Title Field**: Only the title field is required when creating a task.
+- **Automatic Deadlines**: Tasks are assigned a default deadline of one day from the current date if no deadline is specified.
+- **Smart Member Assignment**: Team members are automatically assigned to tasks based on a keyword matching system that analyzes the title and description, using a scoring mechanism to determine the best fit.
+
 ## Available Scripts
 
 In the project directory, you can run:

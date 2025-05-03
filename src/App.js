@@ -119,7 +119,6 @@ function App() {
             name="teamMember"
             value={formData.teamMember}
             onChange={handleChange}
-            required
           >
             <option value="">Select a member</option>
             {teamMembers.map((member) => (

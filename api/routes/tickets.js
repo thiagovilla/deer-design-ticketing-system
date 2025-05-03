@@ -4,24 +4,56 @@ var router = express.Router();
 let tickets = []; // In-memory ticket storage
 let ticketIdCounter = 1;
 
+// Mapping of skills to keywords and responsible team members
+const skillToKeywords = {
+  frontend: { keywords: ["UI", "frontend", "React", "CSS"], member: "Alice" },
+  backend: { keywords: ["API", "backend", "Node", "database"], member: "Bob" },
+  devops: {
+    keywords: ["DevOps", "CI/CD", "infrastructure", "cloud"],
+    member: "Charlie",
+  },
+  uiux: { keywords: ["design", "UX", "prototype", "Figma"], member: "Diana" },
+  qa: { keywords: ["test", "QA", "bug", "automation"], member: "Eve" },
+};
+
+// Function to determine the team member based on title and description
+function assignTeamMember(title, description) {
+  const content = `${title} ${description || ""}`.toLowerCase();
+  let bestMatch = { member: null, score: 0 };
+
+  for (const skill in skillToKeywords) {
+    const { keywords, member } = skillToKeywords[skill];
+    const score = keywords.reduce((count, keyword) => {
+      return count + (content.includes(keyword.toLowerCase()) ? 1 : 0);
+    }, 0);
+
+    if (score > bestMatch.score) {
+      bestMatch = { member, score };
+    }
+  }
+
+  return bestMatch.member || "Unassigned"; // Default to "Unassigned" if no match
+}
+
 // Create a new ticket
 router.post("/", function (req, res) {
   const { title, deadline, description, teamMember } = req.body;
-  if (!title || !teamMember) {
-    return res
-      .status(400)
-      .json({ error: "Missing required fields: title and/or teamMember" });
+  if (!title) {
+    return res.status(400).json({ error: "Missing required field: title" });
   }
 
   const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+  const assignedTeamMember = teamMember || assignTeamMember(title, description);
+
   const newTicket = {
     id: ticketIdCounter++,
     title,
     deadline: deadline || new Date(Date.now() + ONE_DAY_IN_MS).toISOString(), // Default to a day from now
     description: description || null,
-    teamMember,
+    teamMember: assignedTeamMember,
     status: "Pending",
   };
+
   tickets.push(newTicket);
   res.status(201).json(newTicket);
 });
