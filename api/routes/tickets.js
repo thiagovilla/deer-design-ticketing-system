@@ -76,4 +76,25 @@ router.delete("/:id", function (req, res) {
   res.status(200).json({ message: "Ticket deleted successfully" });
 });
 
+// Update the status of a ticket by ID
+router.patch("/:id/status", function (req, res) {
+  const ticketId = parseInt(req.params.id, 10);
+  const { status } = req.body;
+
+  if (!status) {
+    return res.status(400).json({ error: "Missing required field: status" });
+  }
+
+  const ticket = tickets.find((ticket) => ticket.id === ticketId);
+
+  if (!ticket) {
+    return res.status(404).json({ error: "Ticket not found" });
+  }
+
+  ticket.status = status;
+  res
+    .status(200)
+    .json({ message: "Ticket status updated successfully", ticket });
+});
+
 module.exports = router;

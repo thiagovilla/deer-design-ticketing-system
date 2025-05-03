@@ -22,6 +22,12 @@ function App() {
     { id: 5, name: "Eve", skills: "QA" },
   ];
 
+  const statusOptions = [
+    { value: "Pending", label: "Pending" },
+    { value: "Blocked", label: "Blocked" },
+    { value: "Done", label: "Done" },
+  ];
+
   useEffect(() => {
     // Fetch tickets from the API on component mount
     fetch(`${process.env.REACT_APP_API_URL}/tickets`)
@@ -80,6 +86,31 @@ function App() {
         }
       })
       .catch((error) => setError("Error deleting ticket: " + error.message));
+  };
+
+  const handleStatusChange = (ticketId, newStatus) => {
+    // Send update request to the API
+    fetch(`${process.env.REACT_APP_API_URL}/tickets/${ticketId}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: newStatus }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          setTickets(
+            tickets.map((ticket) =>
+              ticket.id === ticketId ? { ...ticket, status: newStatus } : ticket
+            )
+          );
+        } else {
+          throw new Error("Failed to update the ticket status");
+        }
+      })
+      .catch((error) =>
+        setError("Error updating ticket status: " + error.message)
+      );
   };
 
   const getStatusColor = (status) => {
@@ -164,6 +195,34 @@ function App() {
               Status: {ticket.status}
             </span>{" "}
             |{" "}
+            <select
+              value=""
+              onChange={(e) => handleStatusChange(ticket.id, e.target.value)}
+              style={{
+                border: "1px solid #ccc",
+                background: "none",
+                padding: "4px 8px",
+                borderRadius: "4px",
+                cursor: "pointer",
+                alignItems: "center",
+                color: "black",
+                marginRight: "8px",
+                width: "auto",
+              }}
+            >
+              <option value="" disabled>
+                Change status to
+              </option>
+              {statusOptions.map((option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                  disabled={ticket.status === option.value}
+                >
+                  {option.label}
+                </option>
+              ))}
+            </select>
             <button
               onClick={() => handleDelete(ticket.id)}
               style={{
