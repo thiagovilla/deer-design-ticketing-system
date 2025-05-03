@@ -113,6 +113,26 @@ function App() {
       );
   };
 
+  const handleAssign = (ticketId, teamMember) => {
+    fetch(`${process.env.REACT_APP_API_URL}/tickets/${ticketId}/assign`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ teamMember }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          setTickets(
+            tickets.map((t) => (t.id === ticketId ? { ...t, teamMember } : t))
+          );
+        } else {
+          throw new Error("Failed to assign the ticket");
+        }
+      })
+      .catch((error) => setError("Error assigning ticket: " + error.message));
+  };
+
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
       case "done":
@@ -186,9 +206,35 @@ function App() {
             {ticket.teamMember ? (
               ticket.teamMember
             ) : (
-              <span style={{ color: "red", fontWeight: "bold" }}>
-                Unassigned
-              </span>
+              <>
+                <span style={{ color: "red", fontWeight: "bold" }}>
+                  Unassigned
+                </span>{" "}
+                -{" "}
+                <select
+                  value=""
+                  onChange={(e) => handleAssign(ticket.id, e.target.value)}
+                  style={{
+                    border: "1px solid #ccc",
+                    background: "none",
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    alignItems: "center",
+                    color: "black",
+                    width: "auto",
+                  }}
+                >
+                  <option value="" disabled>
+                    Assign to
+                  </option>
+                  {teamMembers.map((member) => (
+                    <option key={member.id} value={member.name}>
+                      {member.name} ({member.skills})
+                    </option>
+                  ))}
+                </select>
+              </>
             )}{" "}
             |{" "}
             <span style={{ color: getStatusColor(ticket.status) }}>

@@ -97,4 +97,25 @@ router.patch("/:id/status", function (req, res) {
     .json({ message: "Ticket status updated successfully", ticket });
 });
 
+// Assign a task to a specific team member by ID
+router.patch("/:id/assign", function (req, res) {
+  const ticketId = parseInt(req.params.id, 10);
+  const { teamMember } = req.body;
+
+  if (!teamMember) {
+    return res
+      .status(400)
+      .json({ error: "Missing required field: teamMember" });
+  }
+
+  const ticket = tickets.find((ticket) => ticket.id === ticketId);
+
+  if (!ticket) {
+    return res.status(404).json({ error: "Ticket not found" });
+  }
+
+  ticket.teamMember = teamMember;
+  res.status(200).json({ message: "Ticket assigned successfully", ticket });
+});
+
 module.exports = router;
