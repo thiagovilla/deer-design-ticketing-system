@@ -13,6 +13,7 @@ function App() {
 
   const [tickets, setTickets] = useState([]);
   const [error, setError] = useState(null); // State to store errors
+  const [loading, setLoading] = useState(false); // State to track loading status
 
   const teamMembers = [
     { id: 1, name: "Alice", skills: "Frontend" },
@@ -43,6 +44,7 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true
     const newTicket = {
       ...formData,
       deadline: new Date(formData.deadline).toISOString(), // Convert to ISO format
@@ -70,7 +72,8 @@ function App() {
         });
         setError(null); // Clear any previous errors
       })
-      .catch((error) => setError("Error creating ticket: " + error.message));
+      .catch((error) => setError("Error creating ticket: " + error.message))
+      .finally(() => setLoading(false)); // Set loading to false
   };
 
   const handleDelete = (ticketId) => {
@@ -194,7 +197,35 @@ function App() {
             ))}
           </select>
         </div>
-        <button type="submit">Submit Request</button>
+        <button type="submit" disabled={loading}>
+          {loading ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 100 100"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="4"
+              className="spinner"
+              style={{
+                animation: "spin 1s linear infinite",
+                display: "inline-block",
+                verticalAlign: "middle",
+              }}
+            >
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                strokeDasharray="283"
+                strokeDashoffset="75"
+              ></circle>
+            </svg>
+          ) : (
+            "Submit Request"
+          )}
+        </button>
       </form>
       <h2>Ticket List</h2>
       {tickets.length === 0 ? (
@@ -312,5 +343,15 @@ function App() {
     </div>
   );
 }
+
+// Add CSS for spinner animation
+const spinnerStyle = document.createElement("style");
+spinnerStyle.innerHTML = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(spinnerStyle);
 
 export default App;
