@@ -197,114 +197,118 @@ function App() {
         <button type="submit">Submit Request</button>
       </form>
       <h2>Ticket List</h2>
-      <ul>
-        {tickets.map((ticket, index) => (
-          <li key={index}>
-            <strong>{ticket.title}</strong> - {ticket.description} (Deadline:{" "}
-            {new Date(ticket.deadline).toISOString().split("T")[0]}) <br />
-            Assigned to:{" "}
-            {ticket.teamMember ? (
-              ticket.teamMember
-            ) : (
-              <>
-                <span style={{ color: "red", fontWeight: "bold" }}>
-                  Unassigned
-                </span>{" "}
-                -{" "}
-                <select
-                  value=""
-                  onChange={(e) => handleAssign(ticket.id, e.target.value)}
-                  style={{
-                    border: "1px solid #ccc",
-                    background: "none",
-                    padding: "4px 8px",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    alignItems: "center",
-                    color: "black",
-                    width: "auto",
-                  }}
-                >
-                  <option value="" disabled>
-                    Assign to
-                  </option>
-                  {teamMembers.map((member) => (
-                    <option key={member.id} value={member.name}>
-                      {member.name} ({member.skills})
+      {tickets.length === 0 ? (
+        <p>No tickets yet</p>
+      ) : (
+        <ul>
+          {tickets.map((ticket, index) => (
+            <li key={index}>
+              <strong>{ticket.title}</strong> - {ticket.description} (Deadline:{" "}
+              {new Date(ticket.deadline).toISOString().split("T")[0]}) <br />
+              Assigned to:{" "}
+              {ticket.teamMember ? (
+                ticket.teamMember
+              ) : (
+                <>
+                  <span style={{ color: "red", fontWeight: "bold" }}>
+                    Unassigned
+                  </span>{" "}
+                  -{" "}
+                  <select
+                    value=""
+                    onChange={(e) => handleAssign(ticket.id, e.target.value)}
+                    style={{
+                      border: "1px solid #ccc",
+                      background: "none",
+                      padding: "4px 8px",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      alignItems: "center",
+                      color: "black",
+                      width: "auto",
+                    }}
+                  >
+                    <option value="" disabled>
+                      Assign to
                     </option>
-                  ))}
-                </select>
-              </>
-            )}{" "}
-            |{" "}
-            <span style={{ color: getStatusColor(ticket.status) }}>
-              Status: {ticket.status}
-            </span>{" "}
-            |{" "}
-            <select
-              value=""
-              onChange={(e) => handleStatusChange(ticket.id, e.target.value)}
-              style={{
-                border: "1px solid #ccc",
-                background: "none",
-                padding: "4px 8px",
-                borderRadius: "4px",
-                cursor: "pointer",
-                alignItems: "center",
-                color: "black",
-                marginRight: "8px",
-                width: "auto",
-              }}
-            >
-              <option value="" disabled>
-                Change status to
-              </option>
-              {statusOptions.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                  disabled={ticket.status === option.value}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={() => handleDelete(ticket.id)}
-              style={{
-                border: "1px solid #ccc",
-                background: "none",
-                padding: "4px 8px",
-                borderRadius: "4px",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "4px",
-                color: "black",
-                verticalAlign: "middle",
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ width: "16px", height: "16px" }}
+                    {teamMembers.map((member) => (
+                      <option key={member.id} value={member.name}>
+                        {member.name} ({member.skills})
+                      </option>
+                    ))}
+                  </select>
+                </>
+              )}{" "}
+              |{" "}
+              <span style={{ color: getStatusColor(ticket.status) }}>
+                Status: {ticket.status}
+              </span>{" "}
+              |{" "}
+              <select
+                value=""
+                onChange={(e) => handleStatusChange(ticket.id, e.target.value)}
+                style={{
+                  border: "1px solid #ccc",
+                  background: "none",
+                  padding: "4px 8px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  alignItems: "center",
+                  color: "black",
+                  marginRight: "8px",
+                  width: "auto",
+                }}
               >
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6l-2 14H7L5 6"></path>
-                <path d="M10 11v6"></path>
-                <path d="M14 11v6"></path>
-                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
-              </svg>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+                <option value="" disabled>
+                  Change status to
+                </option>
+                {statusOptions.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    disabled={ticket.status === option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={() => handleDelete(ticket.id)}
+                style={{
+                  border: "1px solid #ccc",
+                  background: "none",
+                  padding: "4px 8px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  color: "black",
+                  verticalAlign: "middle",
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ width: "16px", height: "16px" }}
+                >
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6l-2 14H7L5 6"></path>
+                  <path d="M10 11v6"></path>
+                  <path d="M14 11v6"></path>
+                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+                </svg>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
