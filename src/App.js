@@ -156,8 +156,9 @@ function App() {
       {/* Display errors */}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Title:</label>
+          <label htmlFor="title">Title:</label>
           <input
+            id="title"
             type="text"
             name="title"
             value={formData.title}
@@ -166,16 +167,18 @@ function App() {
           />
         </div>
         <div>
-          <label>Description:</label>
+          <label htmlFor="description">Description:</label>
           <textarea
+            id="description"
             name="description"
             value={formData.description}
             onChange={handleChange}
           />
         </div>
         <div>
-          <label>Deadline:</label>
+          <label htmlFor="deadline">Deadline:</label>
           <input
+            id="deadline"
             type="date"
             name="deadline"
             value={formData.deadline}
@@ -183,8 +186,9 @@ function App() {
           />
         </div>
         <div>
-          <label>Assign to Team Member:</label>
+          <label htmlFor="teamMember">Assign to Team Member:</label>
           <select
+            id="teamMember"
             name="teamMember"
             value={formData.teamMember}
             onChange={handleChange}
