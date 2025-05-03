@@ -32,7 +32,7 @@ function assignTeamMember(title, description) {
     }
   }
 
-  return bestMatch.member || "Unassigned"; // Default to "Unassigned" if no match
+  return bestMatch.member || null; // Default to "Unassigned" (null) if no match
 }
 
 // Create a new ticket

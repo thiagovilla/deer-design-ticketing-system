@@ -136,7 +136,15 @@ function App() {
           <li key={index}>
             <strong>{ticket.title}</strong> - {ticket.description} (Deadline:{" "}
             {new Date(ticket.deadline).toISOString().split("T")[0]}) <br />
-            Assigned to: {ticket.teamMember} |{" "}
+            Assigned to:{" "}
+            {ticket.teamMember ? (
+              ticket.teamMember
+            ) : (
+              <span style={{ color: "red", fontWeight: "bold" }}>
+                Unassigned
+              </span>
+            )}{" "}
+            |{" "}
             <span style={{ color: getStatusColor(ticket.status) }}>
               Status: {ticket.status}
             </span>
